@@ -1,4 +1,4 @@
-package com.pentaho.util;
+package com.report.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,13 +34,19 @@ private static final String QUERY_NAME = "ReportQuery";
 	@Override
 	public DataFactory getDataFactory() {
 		
-		final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();
+		/*final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();
 		    sampleDriverConnectionProvider.setDriver(env.getProperty("spring.datasource.driver-class-name"));
 		    sampleDriverConnectionProvider.setUrl(env.getProperty("spring.datasource.url"));
 		    sampleDriverConnectionProvider.setProperty("user", env.getProperty("spring.datasource.username"));
 		    sampleDriverConnectionProvider.setProperty("password",env.getProperty("spring.datasource.password"));
-
-		    final SQLReportDataFactory dataFactory = new SQLReportDataFactory(sampleDriverConnectionProvider);
+		  final SQLReportDataFactory dataFactory = new SQLReportDataFactory(sampleDriverConnectionProvider);
+		 */
+		
+			DataSource ds = (DataSource) ApplicationContextProvider.getApplicationContext().getBean("dataSource");
+			Connection c = ds.getConnection();
+			
+		    final SQLReportDataFactory dataFactory = new SQLReportDataFactory(c);
+		  
 		    dataFactory.setQuery(QUERY_NAME,"select customerName, city, state, postalCode, country from customers order by UPPER(customerName)");
 
 		    return dataFactory;
